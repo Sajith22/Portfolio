@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alex Rivera — Developer Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Syne', 'sans-serif'],
+            body: ['DM Sans', 'sans-serif'],
+          },
+          colors: {
+            accent: '#00E5FF',
+            accent2: '#FF6B6B',
+            surface: {
+              dark: '#0A0A0F',
+              card: '#111118',
+              border: '#1E1E2E',
+            }
+          },
+          animation: {
+            'fade-up': 'fadeUp 0.7s ease forwards',
+            'fade-in': 'fadeIn 0.5s ease forwards',
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 4s ease-in-out infinite',
+            'spin-slow': 'spin 20s linear infinite',
+          },
+          keyframes: {
+            fadeUp: {
+              '0%': { opacity: 0, transform: 'translateY(30px)' },
+              '100%': { opacity: 1, transform: 'translateY(0)' },
+            },
+            fadeIn: {
+              '0%': { opacity: 0 },
+              '100%': { opacity: 1 },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-20px)' },
+            },
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { font-family: 'DM Sans', sans-serif; }
+    body {
+      background-color: #0A0A0F;
+      color: #E8E8F0;
+      overflow-x: hidden;
+    }
+    .light body {
+      background-color: #F4F4F8;
+      color: #111118;
+    }
+
+    /* ── Noise overlay ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ── Glow blobs ── */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Gradient text ── */
+    .grad-text {
+      background: linear-gradient(135deg, #00E5FF 0%, #7B61FF 50%, #FF6B6B 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── Accent underline ── */
+    .accent-line {
+      position: relative;
+      display: inline-block;
+    }
+    .accent-line::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 100%; height: 2px;
+      background: linear-gradient(90deg, #00E5FF, #7B61FF);
+      border-radius: 2px;
+    }
+
+    /* ── Glassmorphism card ── */
+    .glass-card {
+      background: rgba(17,17,24,0.7);
+      border: 1px solid rgba(255,255,255,0.06);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    .dark .glass-card {
+      background: rgba(17,17,24,0.7);
+    }
+    html:not(.dark) .glass-card {
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    /* ── Nav blur ── */
+    .nav-blur {
+      background: rgba(10,10,15,0.8);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    html:not(.dark) .nav-blur {
+      background: rgba(244,244,248,0.85);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+
+    /* ── Scroll reveal ── */
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Badge ── */
+    .tech-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 10px; border-radius: 999px;
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.03em;
+      background: rgba(0,229,255,0.08);
+      border: 1px solid rgba(0,229,255,0.2);
+      color: #00E5FF;
+    }
+    html:not(.dark) .tech-badge {
+      background: rgba(0,150,180,0.08);
+      border-color: rgba(0,150,180,0.3);
+      color: #006E8A;
+    }
+
+    /* ── Skill pill ── */
+    .skill-pill {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 18px; border-radius: 12px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .skill-pill:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,229,255,0.15); }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 28px; border-radius: 10px;
+      background: linear-gradient(135deg, #00E5FF, #7B61FF);
+      color: #0A0A0F; font-weight: 600; font-size: 0.9rem;
+      transition: opacity 0.2s, transform 0.2s, box-shadow 0.3s;
+      box-shadow: 0 4px 24px rgba(0,229,255,0.3);
+    }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,229,255,0.4); }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 26px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: inherit; font-weight: 500; font-size: 0.9rem;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+    .btn-ghost:hover { border-color: #00E5FF; background: rgba(0,229,255,0.06); transform: translateY(-2px); }
+    html:not(.dark) .btn-ghost { border-color: rgba(0,0,0,0.2); }
+    html:not(.dark) .btn-ghost:hover { border-color: #006E8A; background: rgba(0,150,180,0.06); }
+
+    /* ── Project card ── */
+    .project-card { transition: transform 0.3s, box-shadow 0.3s; }
+    .project-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+
+    /* ── Timeline ── */
+    .timeline-dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: linear-gradient(135deg, #00E5FF, #7B61FF);
+      box-shadow: 0 0 0 4px rgba(0,229,255,0.15);
+      flex-shrink: 0; margin-top: 4px;
+    }
+
+    /* ── Form inputs ── */
+    .form-input {
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      color: inherit;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    html:not(.dark) .form-input {
+      background: rgba(0,0,0,0.04);
+      border-color: rgba(0,0,0,0.1);
+    }
+    .form-input:focus { border-color: #00E5FF; box-shadow: 0 0 0 3px rgba(0,229,255,0.12); }
+    .form-input::placeholder { color: rgba(255,255,255,0.3); }
+    html:not(.dark) .form-input::placeholder { color: rgba(0,0,0,0.3); }
+
+    /* ── Section heading ── */
+    .section-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem; font-weight: 500; letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #00E5FF;
+      margin-bottom: 8px;
+    }
+    html:not(.dark) .section-label { color: #006E8A; }
+
+    /* ── Nav link ── */
+    .nav-link {
+      font-size: 0.875rem; font-weight: 500;
+      color: rgba(232,232,240,0.7);
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: -3px; left: 0;
+      width: 0; height: 2px;
+      background: #00E5FF; border-radius: 2px;
+      transition: width 0.3s;
+    }
+    .nav-link:hover { color: #00E5FF; }
+    .nav-link:hover::after { width: 100%; }
+    html:not(.dark) .nav-link { color: rgba(17,17,24,0.65); }
+    html:not(.dark) .nav-link:hover { color: #006E8A; }
+    html:not(.dark) .nav-link::after { background: #006E8A; }
+
+    /* ── Mobile menu ── */
+    #mobile-menu {
+      transition: opacity 0.3s, transform 0.3s, max-height 0.4s;
+      max-height: 0; overflow: hidden; opacity: 0;
+    }
+    #mobile-menu.open { max-height: 400px; opacity: 1; }
+
+    /* ── Divider ── */
+    .fancy-divider {
+      border: none; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+      margin: 0;
+    }
+    html:not(.dark) .fancy-divider {
+      background: linear-gradient(90deg, transparent, rgba(0,0,0,0.08), transparent);
+    }
+
+    /* ── Cursor glow ── */
+    #cursor-glow {
+      position: fixed; pointer-events: none;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,229,255,0.04) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      transition: left 0.15s ease, top 0.15s ease;
+    }
+
+    /* ── Staggered delays ── */
+    .delay-100 { transition-delay: 0.1s; }
+    .delay-200 { transition-delay: 0.2s; }
+    .delay-300 { transition-delay: 0.3s; }
+    .delay-400 { transition-delay: 0.4s; }
+    .delay-500 { transition-delay: 0.5s; }
+  </style>
+</head>
+
+<body class="font-body relative">
+
+  <!-- Cursor glow -->
+  <div id="cursor-glow"></div>
+
+  <!-- ═══════════════════════════════════════════════
+       NAVBAR
+  ═══════════════════════════════════════════════ -->
+  <nav class="nav-blur fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a href="#hero" class="font-display font-bold text-lg tracking-tight">
+        <span class="grad-text">AR</span><span class="opacity-40">.</span>
+      </a>
+
+      <!-- Desktop links -->
+      <div class="hidden md:flex items-center gap-7">
+        <a href="#about"     class="nav-link">About</a>
+        <a href="#skills"    class="nav-link">Skills</a>
+        <a href="#projects"  class="nav-link">Projects</a>
+        <a href="#experience"class="nav-link">Experience</a>
+        <a href="#contact"   class="nav-link">Contact</a>
+      </div>
+
+      <!-- Right controls -->
+      <div class="flex items-center gap-3">
+        <!-- Dark/Light toggle -->
+        <button id="theme-toggle" aria-label="Toggle theme"
+          class="w-9 h-9 rounded-lg flex items-center justify-center border border-white/10 hover:border-accent/40 transition-colors text-sm">
+          <i id="theme-icon" class="fa-solid fa-moon text-accent"></i>
+        </button>
+        <!-- Mobile hamburger -->
+        <button id="menu-toggle" class="md:hidden w-9 h-9 rounded-lg flex items-center justify-center border border-white/10 hover:border-accent/40 transition-colors" aria-label="Menu">
+          <i class="fa-solid fa-bars text-sm"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="nav-blur md:hidden px-5 pb-4">
+      <div class="flex flex-col gap-1 pt-2">
+        <a href="#about"      class="nav-link py-2 block">About</a>
+        <a href="#skills"     class="nav-link py-2 block">Skills</a>
+        <a href="#projects"   class="nav-link py-2 block">Projects</a>
+        <a href="#experience" class="nav-link py-2 block">Experience</a>
+        <a href="#contact"    class="nav-link py-2 block">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ═══════════════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════════════ -->
+  <section id="hero" class="relative min-h-screen flex items-center overflow-hidden pt-16">
+    <!-- Blobs -->
+    <div class="blob w-[600px] h-[600px] top-[-150px] left-[-150px] bg-cyan-500/10"></div>
+    <div class="blob w-[500px] h-[500px] bottom-[-100px] right-[-100px] bg-violet-500/10"></div>
+
+    <!-- Grid pattern -->
+    <div class="absolute inset-0 z-0 opacity-[0.03]"
+      style="background-image: linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px); background-size: 60px 60px;">
+    </div>
+
+    <div class="relative z-10 max-w-6xl mx-auto px-5 sm:px-8 w-full py-24">
+      <div class="max-w-3xl">
+        <!-- Status badge -->
+        <div class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-sm mb-8">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse-slow"></span>
+          <span class="opacity-70">Available for work — Open to opportunities</span>
+        </div>
+
+        <!-- Name -->
+        <h1 class="reveal delay-100 font-display text-5xl sm:text-7xl lg:text-8xl font-extrabold leading-[1.0] mb-6">
+          Alex<br/>
+          <span class="grad-text">Rivera</span>
+        </h1>
+
+        <!-- Title -->
+        <p class="reveal delay-200 font-display text-xl sm:text-2xl font-semibold mb-4 opacity-80">
+          Full-Stack Developer &amp; UI Engineer
+        </p>
+
+        <!-- Tagline -->
+        <p class="reveal delay-300 text-base sm:text-lg opacity-55 max-w-xl leading-relaxed mb-10">
+          I craft high-performance web applications with obsessive attention to detail — turning complex problems into elegant, user-centred digital experiences.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="reveal delay-400 flex flex-wrap gap-4">
+          <a href="#projects" class="btn-primary">
+            <i class="fa-solid fa-folder-open text-sm"></i> View Projects
+          </a>
+          <a href="#" class="btn-ghost" download>
+            <i class="fa-solid fa-download text-sm"></i> Download Resume
+          </a>
+        </div>
+
+        <!-- Social links -->
+        <div class="reveal delay-500 flex gap-4 mt-10">
+          <a href="https://github.com/" target="_blank" aria-label="GitHub"
+            class="w-10 h-10 glass-card rounded-xl flex items-center justify-center hover:border-accent/40 hover:text-accent transition-colors text-sm">
+            <i class="fa-brands fa-github"></i>
+          </a>
+          <a href="https://linkedin.com/" target="_blank" aria-label="LinkedIn"
+            class="w-10 h-10 glass-card rounded-xl flex items-center justify-center hover:border-accent/40 hover:text-accent transition-colors text-sm">
+            <i class="fa-brands fa-linkedin-in"></i>
+          </a>
+          <a href="https://twitter.com/" target="_blank" aria-label="Twitter/X"
+            class="w-10 h-10 glass-card rounded-xl flex items-center justify-center hover:border-accent/40 hover:text-accent transition-colors text-sm">
+            <i class="fa-brands fa-x-twitter"></i>
+          </a>
+          <a href="mailto:alex@email.com" aria-label="Email"
+            class="w-10 h-10 glass-card rounded-xl flex items-center justify-center hover:border-accent/40 hover:text-accent transition-colors text-sm">
+            <i class="fa-solid fa-envelope"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30 animate-float">
+      <span class="text-xs tracking-widest uppercase">Scroll</span>
+      <i class="fa-solid fa-chevron-down text-xs"></i>
+    </div>
+  </section>
+
+  <hr class="fancy-divider" />
+
+
+  <!-- ═══════════════════════════════════════════════
+       ABOUT
+  ═══════════════════════════════════════════════ -->
+  <section id="about" class="py-28 relative">
+    <div class="blob w-[400px] h-[400px] top-0 right-0 bg-violet-500/8"></div>
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+
+        <!-- Left: text -->
+        <div class="reveal">
+          <p class="section-label">Who I am</p>
+          <h2 class="font-display text-4xl sm:text-5xl font-bold mb-6 leading-tight">
+            Building things for the<br/><span class="grad-text">web &amp; beyond</span>
+          </h2>
+          <p class="opacity-60 leading-relaxed mb-5">
+            Hi! I'm Alex — a full-stack developer with 5+ years of experience building scalable web applications, from pixel-perfect UIs to robust backend systems. I'm passionate about performance, accessibility, and creating interfaces people love to use.
+          </p>
+          <p class="opacity-60 leading-relaxed mb-8">
+            When I'm not coding, you'll find me contributing to open-source projects, writing technical articles, or exploring the intersection of design and engineering. I believe great software is built at the crossroads of empathy, craft, and curiosity.
+          </p>
+          <!-- Stats -->
+          <div class="grid grid-cols-3 gap-4">
+            <div class="glass-card rounded-xl p-4 text-center">
+              <div class="font-display text-3xl font-bold grad-text">5+</div>
+              <div class="text-xs opacity-50 mt-1">Years Exp.</div>
+            </div>
+            <div class="glass-card rounded-xl p-4 text-center">
+              <div class="font-display text-3xl font-bold grad-text">40+</div>
+              <div class="text-xs opacity-50 mt-1">Projects</div>
+            </div>
+            <div class="glass-card rounded-xl p-4 text-center">
+              <div class="font-display text-3xl font-bold grad-text">15+</div>
+              <div class="text-xs opacity-50 mt-1">Happy Clients</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: card / portrait placeholder -->
+        <div class="reveal delay-200 flex justify-center lg:justify-end">
+          <div class="relative">
+            <!-- Decorative ring -->
+            <div class="absolute inset-[-12px] rounded-3xl border border-dashed border-accent/20 animate-spin-slow"></div>
+            <!-- Main card -->
+            <div class="glass-card rounded-2xl w-72 h-80 sm:w-80 sm:h-96 flex flex-col items-center justify-center gap-4 overflow-hidden relative">
+              <!-- Gradient fill as placeholder -->
+              <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-violet-500/10 to-rose-500/10"></div>
+              <i class="fa-solid fa-user-tie text-6xl opacity-20 relative z-10"></i>
+              <p class="text-xs opacity-30 relative z-10 tracking-widest uppercase">Replace with your photo</p>
+            </div>
+            <!-- Corner tag -->
+            <div class="absolute -bottom-4 -right-4 glass-card rounded-xl px-4 py-3 text-sm font-medium">
+              <i class="fa-solid fa-location-dot text-accent mr-2"></i>San Francisco, CA
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="fancy-divider" />
+
+
+  <!-- ═══════════════════════════════════════════════
+       SKILLS
+  ═══════════════════════════════════════════════ -->
+  <section id="skills" class="py-28 relative">
+    <div class="blob w-[500px] h-[500px] bottom-0 left-[-100px] bg-cyan-500/8"></div>
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      <div class="text-center mb-16 reveal">
+        <p class="section-label">What I work with</p>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold">
+          Skills &amp; <span class="grad-text">Technologies</span>
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Frontend -->
+        <div class="reveal glass-card rounded-2xl p-6">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="w-10 h-10 rounded-xl bg-cyan-500/15 flex items-center justify-center text-accent">
+              <i class="fa-solid fa-palette"></i>
+            </div>
+            <h3 class="font-display font-semibold text-lg">Frontend</h3>
+          </div>
+          <div class="flex flex-col gap-3">
+            <div class="skill-pill glass-card rounded-xl">
+              <i class="fa-brands fa-react text-cyan-400 w-5 text-center"></i>
+              <span class="text-sm">React / Next.js</span>
+              <div class="ml-auto h-1.5 w-20 rounded-full bg-white/10 overflow-hidden"><div class="h-full w-[92%] bg-gradient-to-r from-cyan-400 to-violet-400 rounded-full"></div></div>
+            </div>
+            <div class="skill-pill glass-card rounded-xl">
+              <i class="fa-brands fa-vuejs text-emerald-400 w-5 text-center"></i>
+              <span class="text-sm">Vue.js</span>
+              <div class="ml-auto h-1.5 w-20 rounded-full bg-white/10 overflow-hidden"><div class="h-full w-[78%] bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full"></div></div>
+            </div>
+            <div class="skill-pill glass-card rounded-xl">
+              <i class="fa-brands fa-css3-alt text-blue-400 w-5 text-center"></i>
+              <span class="text-sm">Tailwind CSS</span>
+              <div class="ml-auto h-1.5 w-20 rounded-full bg-white/10 overflow-hidden"><div class="h-full w-[95%] bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full"></div></div>
+            </div>
+            <div class="skill-pill glass-card rounded-xl">
+              <i class="fa-brands fa-js text-yellow-400 w-5 text-center"></i>
+              <span class="text-sm">TypeScript</span>
+              <div class="ml-auto h-1.5 w-20 rounded-full bg-white/10 overflow-hidden"><div class="h-full w-[88%] bg-gradient-to-r from-yellow-400 to-amber-400 rounded-full"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Backend -->
+        <div class="reveal delay-100 glass-card rounded-2xl p-6">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="w-10 h-10 rounded-xl bg-violet-500/15 flex items-center justify-center text-violet-400">
+              <i class="fa-solid fa-server"></i>
+            </div>
+            <h3 class="font-display font-semibold text-lg">Backend</h3>
+          </div>
+          <div class="flex flex-col gap-3">
+            <div class="skill-pill glass-card rounded-xl">
+              <i class="fa-brands fa-node-js text-green-400 w-5 text-center"></i>
+              <span class="text-sm">Node.js / Express</span>
+              <div class="ml-auto h-1.5 w-20 rounded-full bg-white/10 overflow-hidden"><div class="h-full w-[90%] bg-gradient-to-r from-green-400 to-emerald-400 rounded-full"></div></div>
+            </div>
+            <div class="skill-pill glass-card rounded-xl">
+              <i class="fa-brands fa-python text-yellow-300 w-5 text-center"></i>
+              <span class="text-sm">Python / FastAPI</span>
+              <div class="ml-auto h-1.5 w-20 rounded-full bg-white/10 overflow-hidden"><div class="h-full w-[82%] bg-gradient-to-r from-yellow-400 to-amber-400 rounded-full"></div></div>
+            </div>
+            <div class="skill-pill glass-card rounded-xl">
+              <i class="fa-solid fa-database text-orange-400 w-5 text-center"></i>
+              <span class="text-sm">PostgreSQL / MongoDB</span>
+              <div class="ml-auto h-1.5 w-20 rounded-full bg-white/10 overflow-hidden"><div class="h-full w-[85%] bg-gradient-to-r from-orange-400 to-amber-400 rounded-full"></div></div>
+            </div>
+            <div class="skill-pill glass-card rounded-xl">
+              <i class="fa-solid fa-bolt text-pink-400 w-5 text-center"></i>
+              <span class="text-sm">Redis / GraphQL</span>
+              <div class="ml-auto h-1.5 w-20 rounded-full bg-white/10 overflow-hidden"><div class="h-full w-[74%] bg-gradient-to-r from-pink-400 to-rose-400 rounded-full"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tools & Cloud -->
+        <div class="reveal delay-200 glass-card rounded-2xl p-6">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="w-10 h-10 rounded-xl bg-rose-500/15 flex items-center justify-center text-rose-400">
+              <i class="fa-solid fa-cloud"></i>
+            </div>
+            <h3 class="font-display font-semibold text-lg">Tools &amp; Cloud</h3>
+          </div>
+          <div class="flex flex-col gap-3">
+            <div class="skill-pill glass-card rounded-xl">
+              <i class="fa-brands fa-docker text-blue-300 w-5 text-center"></i>
+              <span class="text-sm">Docker / Kubernetes</span>
+              <div class="ml-auto h-1.5 w-20 rounded-full bg-white/10 overflow-hidden"><div class="h-full w-[75%] bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full"></div></div>
+            </div>
+            <div class="skill-pill glass-card rounded-xl">
+              <i class="fa-brands fa-aws text-orange-300 w-5 text-center"></i>
+              <span class="text-sm">AWS / GCP</span>
+              <div class="ml-auto h-1.5 w-20 rounded-full bg-white/10 overflow-hidden"><div class="h-full w-[70%] bg-gradient-to-r from-orange-400 to-amber-400 rounded-full"></div></div>
+            </div>
+            <div class="skill-pill glass-card rounded-xl">
+              <i class="fa-brands fa-github text-gray-300 w-5 text-center"></i>
+              <span class="text-sm">Git / CI/CD</span>
+              <div class="ml-auto h-1.5 w-20 rounded-full bg-white/10 overflow-hidden"><div class="h-full w-[93%] bg-gradient-to-r from-gray-400 to-slate-400 rounded-full"></div></div>
+            </div>
+            <div class="skill-pill glass-card rounded-xl">
+              <i class="fa-solid fa-wand-magic-sparkles text-purple-400 w-5 text-center"></i>
+              <span class="text-sm">Figma / Design Systems</span>
+              <div class="ml-auto h-1.5 w-20 rounded-full bg-white/10 overflow-hidden"><div class="h-full w-[80%] bg-gradient-to-r from-purple-400 to-violet-400 rounded-full"></div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="fancy-divider" />
+
+
+  <!-- ═══════════════════════════════════════════════
+       PROJECTS
+  ═══════════════════════════════════════════════ -->
+  <section id="projects" class="py-28 relative">
+    <div class="blob w-[450px] h-[450px] top-0 right-0 bg-rose-500/8"></div>
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      <div class="text-center mb-16 reveal">
+        <p class="section-label">What I've built</p>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold">
+          Featured <span class="grad-text">Projects</span>
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Project 1 -->
+        <div class="reveal project-card glass-card rounded-2xl overflow-hidden flex flex-col">
+          <div class="h-44 bg-gradient-to-br from-cyan-500/20 via-violet-500/20 to-transparent flex items-center justify-center">
+            <i class="fa-solid fa-store text-4xl opacity-30"></i>
+          </div>
+          <div class="p-6 flex flex-col flex-1">
+            <h3 class="font-display font-bold text-lg mb-2">ShopFlow — E-Commerce Platform</h3>
+            <p class="text-sm opacity-55 leading-relaxed mb-4 flex-1">
+              A full-stack e-commerce solution with real-time inventory management, Stripe integration, and a blazing-fast storefront built on Next.js.
+            </p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="tech-badge">Next.js</span>
+              <span class="tech-badge">Prisma</span>
+              <span class="tech-badge">Stripe</span>
+              <span class="tech-badge">PostgreSQL</span>
+            </div>
+            <div class="flex gap-3">
+              <a href="#" target="_blank" class="btn-ghost text-xs px-4 py-2 flex-1 justify-center">
+                <i class="fa-brands fa-github"></i> Code
+              </a>
+              <a href="#" target="_blank" class="btn-primary text-xs px-4 py-2 flex-1 justify-center">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Live
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="reveal delay-100 project-card glass-card rounded-2xl overflow-hidden flex flex-col">
+          <div class="h-44 bg-gradient-to-br from-emerald-500/20 via-cyan-500/20 to-transparent flex items-center justify-center">
+            <i class="fa-solid fa-brain text-4xl opacity-30"></i>
+          </div>
+          <div class="p-6 flex flex-col flex-1">
+            <h3 class="font-display font-bold text-lg mb-2">MindMap AI — Knowledge Graph</h3>
+            <p class="text-sm opacity-55 leading-relaxed mb-4 flex-1">
+              An AI-powered note-taking app that automatically builds a visual knowledge graph from your notes using NLP and graph algorithms.
+            </p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="tech-badge">React</span>
+              <span class="tech-badge">Python</span>
+              <span class="tech-badge">OpenAI API</span>
+              <span class="tech-badge">D3.js</span>
+            </div>
+            <div class="flex gap-3">
+              <a href="#" target="_blank" class="btn-ghost text-xs px-4 py-2 flex-1 justify-center">
+                <i class="fa-brands fa-github"></i> Code
+              </a>
+              <a href="#" target="_blank" class="btn-primary text-xs px-4 py-2 flex-1 justify-center">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Live
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="reveal delay-200 project-card glass-card rounded-2xl overflow-hidden flex flex-col">
+          <div class="h-44 bg-gradient-to-br from-violet-500/20 via-rose-500/20 to-transparent flex items-center justify-center">
+            <i class="fa-solid fa-chart-line text-4xl opacity-30"></i>
+          </div>
+          <div class="p-6 flex flex-col flex-1">
+            <h3 class="font-display font-bold text-lg mb-2">Pulse — Analytics Dashboard</h3>
+            <p class="text-sm opacity-55 leading-relaxed mb-4 flex-1">
+              Real-time analytics dashboard with customisable widgets, WebSocket data streaming, and beautiful data visualisations for SaaS products.
+            </p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="tech-badge">Vue.js</span>
+              <span class="tech-badge">Node.js</span>
+              <span class="tech-badge">WebSockets</span>
+              <span class="tech-badge">Redis</span>
+            </div>
+            <div class="flex gap-3">
+              <a href="#" target="_blank" class="btn-ghost text-xs px-4 py-2 flex-1 justify-center">
+                <i class="fa-brands fa-github"></i> Code
+              </a>
+              <a href="#" target="_blank" class="btn-primary text-xs px-4 py-2 flex-1 justify-center">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Live
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 4 -->
+        <div class="reveal delay-100 project-card glass-card rounded-2xl overflow-hidden flex flex-col">
+          <div class="h-44 bg-gradient-to-br from-amber-500/20 via-orange-500/20 to-transparent flex items-center justify-center">
+            <i class="fa-solid fa-mobile-screen text-4xl opacity-30"></i>
+          </div>
+          <div class="p-6 flex flex-col flex-1">
+            <h3 class="font-display font-bold text-lg mb-2">Habi — Habit Tracker App</h3>
+            <p class="text-sm opacity-55 leading-relaxed mb-4 flex-1">
+              A minimalist habit tracker with streaks, reminders, and AI-generated insights. Cross-platform mobile app with offline-first architecture.
+            </p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="tech-badge">React Native</span>
+              <span class="tech-badge">Expo</span>
+              <span class="tech-badge">SQLite</span>
+              <span class="tech-badge">FastAPI</span>
+            </div>
+            <div class="flex gap-3">
+              <a href="#" target="_blank" class="btn-ghost text-xs px-4 py-2 flex-1 justify-center">
+                <i class="fa-brands fa-github"></i> Code
+              </a>
+              <a href="#" target="_blank" class="btn-primary text-xs px-4 py-2 flex-1 justify-center">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Live
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 5 -->
+        <div class="reveal delay-200 project-card glass-card rounded-2xl overflow-hidden flex flex-col">
+          <div class="h-44 bg-gradient-to-br from-pink-500/20 via-purple-500/20 to-transparent flex items-center justify-center">
+            <i class="fa-solid fa-comments text-4xl opacity-30"></i>
+          </div>
+          <div class="p-6 flex flex-col flex-1">
+            <h3 class="font-display font-bold text-lg mb-2">Relay — Team Chat Platform</h3>
+            <p class="text-sm opacity-55 leading-relaxed mb-4 flex-1">
+              A Slack-inspired team messaging platform with threads, channels, file sharing, and end-to-end encryption for privacy-first teams.
+            </p>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="tech-badge">Next.js</span>
+              <span class="tech-badge">Socket.io</span>
+              <span class="tech-badge">MongoDB</span>
+              <span class="tech-badge">AWS S3</span>
+            </div>
+            <div class="flex gap-3">
+              <a href="#" target="_blank" class="btn-ghost text-xs px-4 py-2 flex-1 justify-center">
+                <i class="fa-brands fa-github"></i> Code
+              </a>
+              <a href="#" target="_blank" class="btn-primary text-xs px-4 py-2 flex-1 justify-center">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Live
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 6 / CTA -->
+        <div class="reveal delay-300 glass-card rounded-2xl p-6 flex flex-col items-center justify-center text-center border-dashed !border-white/10 min-h-[280px]">
+          <div class="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center text-accent text-2xl mb-4">
+            <i class="fa-brands fa-github"></i>
+          </div>
+          <h3 class="font-display font-semibold text-lg mb-2">See more on GitHub</h3>
+          <p class="text-sm opacity-50 mb-6">20+ more open-source projects waiting for you.</p>
+          <a href="https://github.com/" target="_blank" class="btn-primary text-sm">
+            View All Projects <i class="fa-solid fa-arrow-right text-xs"></i>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="fancy-divider" />
+
+
+  <!-- ═══════════════════════════════════════════════
+       EXPERIENCE / EDUCATION
+  ═══════════════════════════════════════════════ -->
+  <section id="experience" class="py-28 relative">
+    <div class="blob w-[400px] h-[400px] top-0 left-0 bg-violet-500/8"></div>
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      <div class="text-center mb-16 reveal">
+        <p class="section-label">My journey</p>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold">
+          Experience &amp; <span class="grad-text">Education</span>
+        </h2>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-12">
+
+        <!-- Experience -->
+        <div class="reveal">
+          <h3 class="font-display font-semibold text-xl mb-8 flex items-center gap-3">
+            <i class="fa-solid fa-briefcase text-accent text-base"></i> Work Experience
+          </h3>
+          <div class="space-y-6">
+
+            <!-- Job 1 -->
+            <div class="flex gap-4">
+              <div class="flex flex-col items-center">
+                <div class="timeline-dot"></div>
+                <div class="w-px flex-1 bg-gradient-to-b from-accent/20 to-transparent mt-2"></div>
+              </div>
+              <div class="glass-card rounded-2xl p-5 flex-1 mb-2">
+                <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
+                  <h4 class="font-display font-semibold">Senior Frontend Engineer</h4>
+                  <span class="tech-badge text-xs">2023 – Present</span>
+                </div>
+                <p class="text-accent text-sm mb-2 font-medium">Acme Technologies</p>
+                <p class="text-sm opacity-55 leading-relaxed">Led the redesign of the core product UI, improving performance by 40% and user engagement by 22%. Managed a team of 3 frontend developers.</p>
+              </div>
+            </div>
+
+            <!-- Job 2 -->
+            <div class="flex gap-4">
+              <div class="flex flex-col items-center">
+                <div class="timeline-dot"></div>
+                <div class="w-px flex-1 bg-gradient-to-b from-accent/20 to-transparent mt-2"></div>
+              </div>
+              <div class="glass-card rounded-2xl p-5 flex-1 mb-2">
+                <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
+                  <h4 class="font-display font-semibold">Full-Stack Developer</h4>
+                  <span class="tech-badge text-xs">2021 – 2023</span>
+                </div>
+                <p class="text-accent text-sm mb-2 font-medium">StartupXYZ</p>
+                <p class="text-sm opacity-55 leading-relaxed">Built and maintained multiple customer-facing features in a fast-paced startup. Owned the entire stack from React frontend to Node.js API.</p>
+              </div>
+            </div>
+
+            <!-- Job 3 -->
+            <div class="flex gap-4">
+              <div class="flex flex-col items-center">
+                <div class="timeline-dot"></div>
+              </div>
+              <div class="glass-card rounded-2xl p-5 flex-1">
+                <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
+                  <h4 class="font-display font-semibold">Junior Developer</h4>
+                  <span class="tech-badge text-xs">2020 – 2021</span>
+                </div>
+                <p class="text-accent text-sm mb-2 font-medium">Digital Agency Co.</p>
+                <p class="text-sm opacity-55 leading-relaxed">Developed and maintained websites and web apps for various clients. Gained hands-on experience with React, PHP, and WordPress.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Education -->
+        <div class="reveal delay-200">
+          <h3 class="font-display font-semibold text-xl mb-8 flex items-center gap-3">
+            <i class="fa-solid fa-graduation-cap text-accent text-base"></i> Education &amp; Certs
+          </h3>
+          <div class="space-y-6">
+
+            <!-- Edu 1 -->
+            <div class="flex gap-4">
+              <div class="flex flex-col items-center">
+                <div class="timeline-dot"></div>
+                <div class="w-px flex-1 bg-gradient-to-b from-accent/20 to-transparent mt-2"></div>
+              </div>
+              <div class="glass-card rounded-2xl p-5 flex-1 mb-2">
+                <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
+                  <h4 class="font-display font-semibold">B.Sc. Computer Science</h4>
+                  <span class="tech-badge text-xs">2016 – 2020</span>
+                </div>
+                <p class="text-accent text-sm mb-2 font-medium">University of California, Berkeley</p>
+                <p class="text-sm opacity-55">GPA 3.8 / 4.0 — Specialisation in Human-Computer Interaction. Dean's List, 4 consecutive semesters.</p>
+              </div>
+            </div>
+
+            <!-- Cert 1 -->
+            <div class="flex gap-4">
+              <div class="flex flex-col items-center">
+                <div class="timeline-dot"></div>
+                <div class="w-px flex-1 bg-gradient-to-b from-accent/20 to-transparent mt-2"></div>
+              </div>
+              <div class="glass-card rounded-2xl p-5 flex-1 mb-2">
+                <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
+                  <h4 class="font-display font-semibold">AWS Solutions Architect</h4>
+                  <span class="tech-badge text-xs">2022</span>
+                </div>
+                <p class="text-accent text-sm mb-2 font-medium">Amazon Web Services</p>
+                <p class="text-sm opacity-55">Professional-level certification covering cloud architecture, scalable systems, and AWS best practices.</p>
+              </div>
+            </div>
+
+            <!-- Cert 2 -->
+            <div class="flex gap-4">
+              <div class="flex flex-col items-center">
+                <div class="timeline-dot"></div>
+              </div>
+              <div class="glass-card rounded-2xl p-5 flex-1">
+                <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
+                  <h4 class="font-display font-semibold">Google UX Design Certificate</h4>
+                  <span class="tech-badge text-xs">2021</span>
+                </div>
+                <p class="text-accent text-sm mb-2 font-medium">Google / Coursera</p>
+                <p class="text-sm opacity-55">Comprehensive UX design program covering research, wireframing, prototyping, and usability testing.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="fancy-divider" />
+
+
+  <!-- ═══════════════════════════════════════════════
+       CONTACT
+  ═══════════════════════════════════════════════ -->
+  <section id="contact" class="py-28 relative">
+    <div class="blob w-[500px] h-[500px] bottom-[-100px] right-[-100px] bg-cyan-500/10"></div>
+    <div class="max-w-3xl mx-auto px-5 sm:px-8">
+      <div class="text-center mb-12 reveal">
+        <p class="section-label">Get in touch</p>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold mb-4">
+          Let's <span class="grad-text">Work Together</span>
+        </h2>
+        <p class="opacity-55 leading-relaxed max-w-lg mx-auto">
+          I'm currently open to freelance work and full-time roles. Whether you have a project in mind or just want to say hello, my inbox is always open.
+        </p>
+      </div>
+
+      <!-- Direct email CTA -->
+      <div class="reveal mb-8 flex justify-center">
+        <a href="mailto:alex@email.com"
+          class="inline-flex items-center gap-3 px-6 py-3 glass-card rounded-2xl text-accent font-medium hover:bg-accent/10 transition-colors">
+          <i class="fa-solid fa-envelope"></i>
+          alex@email.com
+          <i class="fa-solid fa-arrow-up-right-from-square text-xs opacity-60"></i>
+        </a>
+      </div>
+
+      <!-- Contact form -->
+      <div class="reveal delay-100 glass-card rounded-2xl p-8 sm:p-10">
+        <form id="contact-form" class="space-y-5" onsubmit="handleFormSubmit(event)">
+          <div class="grid sm:grid-cols-2 gap-5">
+            <div>
+              <label class="text-xs opacity-50 uppercase tracking-widest block mb-2">Name</label>
+              <input type="text" class="form-input" placeholder="John Doe" required />
+            </div>
+            <div>
+              <label class="text-xs opacity-50 uppercase tracking-widest block mb-2">Email</label>
+              <input type="email" class="form-input" placeholder="john@example.com" required />
+            </div>
+          </div>
+          <div>
+            <label class="text-xs opacity-50 uppercase tracking-widest block mb-2">Subject</label>
+            <input type="text" class="form-input" placeholder="Project inquiry / Let's collaborate!" required />
+          </div>
+          <div>
+            <label class="text-xs opacity-50 uppercase tracking-widest block mb-2">Message</label>
+            <textarea class="form-input resize-none" rows="5" placeholder="Tell me about your project..." required></textarea>
+          </div>
+          <button type="submit" class="btn-primary w-full justify-center text-base py-4">
+            <i class="fa-solid fa-paper-plane"></i> Send Message
+          </button>
+        </form>
+        <div id="form-success" class="hidden text-center py-8">
+          <i class="fa-solid fa-circle-check text-emerald-400 text-4xl mb-4 block"></i>
+          <p class="font-display font-semibold text-lg">Message sent!</p>
+          <p class="text-sm opacity-50 mt-2">Thanks for reaching out. I'll get back to you within 24 hours.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════════ -->
+  <footer class="border-t border-white/5 py-10">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm opacity-40">
+      <span class="font-display font-semibold">Alex Rivera</span>
+      <span>© 2026 — Designed &amp; Built with ♥</span>
+      <div class="flex gap-5">
+        <a href="https://github.com/"   target="_blank" class="hover:opacity-100 transition-opacity"><i class="fa-brands fa-github"></i></a>
+        <a href="https://linkedin.com/" target="_blank" class="hover:opacity-100 transition-opacity"><i class="fa-brands fa-linkedin-in"></i></a>
+        <a href="https://twitter.com/"  target="_blank" class="hover:opacity-100 transition-opacity"><i class="fa-brands fa-x-twitter"></i></a>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ═══════════════════════════════════════════════
+       SCRIPTS
+  ═══════════════════════════════════════════════ -->
+  <script>
+    // ── Theme toggle ──────────────────────────────
+    const html = document.documentElement;
+    const themeBtn  = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    let isDark = true;
+
+    function applyTheme(dark) {
+      isDark = dark;
+      html.classList.toggle('dark', dark);
+      themeIcon.className = dark
+        ? 'fa-solid fa-moon text-accent'
+        : 'fa-solid fa-sun text-amber-400';
+      localStorage.setItem('theme', dark ? 'dark' : 'light');
+    }
+
+    // Load saved preference
+    const saved = localStorage.getItem('theme');
+    applyTheme(saved === 'light' ? false : true);
+
+    themeBtn.addEventListener('click', () => applyTheme(!isDark));
+
+    // ── Mobile menu ────────────────────────────────
+    const menuBtn = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('open');
+    });
+
+    // Close menu on link click
+    mobileMenu.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => mobileMenu.classList.remove('open'));
+    });
+
+    // ── Scroll reveal ─────────────────────────────
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+
+    // ── Cursor glow ───────────────────────────────
+    const glow = document.getElementById('cursor-glow');
+    document.addEventListener('mousemove', e => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top  = e.clientY + 'px';
+    });
+
+    // ── Form submit (demo) ─────────────────────────
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      document.getElementById('contact-form').classList.add('hidden');
+      document.getElementById('form-success').classList.remove('hidden');
+    }
+  </script>
+
+</body>
+</html>
